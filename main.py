@@ -20,6 +20,10 @@ def hex_to_rgb(hex_str) -> list[int]:
     return [int(hex_str[i : i + 2], 16) for i in (0, 2, 4)]
 
 
+def rgb_to_hex(r, g, b) -> str:
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
 def hex_int_to_rgb(hex_num):
     r = (hex_num >> 16) & 0xFF
     g = (hex_num >> 8) & 0xFF
@@ -157,6 +161,66 @@ async def main():
             green_container.draw()
         if blue_container:
             blue_container.draw()
+
+        if red_container and green_container and blue_container:
+            if (
+                red_container.get_colored_picked()
+                and green_container.get_colored_picked()
+                and blue_container.get_colored_picked()
+            ):
+                red_choice = red_container.get_colored_picked()
+                green_choice = green_container.get_colored_picked()
+                blue_choice = blue_container.get_colored_picked()
+                pr.draw_text(
+                    f"RED: {red_choice.r}, {red_choice.g}, {red_choice.b}",
+                    100,
+                    600,
+                    20,
+                    pr.RAYWHITE,
+                )
+                pr.draw_text(
+                    f"GREEN: {green_choice.r}, {green_choice.g}, {green_choice.b}",
+                    100,
+                    620,
+                    20,
+                    pr.RAYWHITE,
+                )
+                pr.draw_text(
+                    f"BLUE: {blue_choice.r}, {blue_choice.g}, {blue_choice.b}",
+                    100,
+                    640,
+                    20,
+                    pr.RAYWHITE,
+                )
+
+                merged_color = pr.Color(
+                    red_choice.r, green_choice.g, blue_choice.b, 255
+                )
+
+                rect2 = pr.Rectangle(370, 90, 150, 150)
+                pr.draw_rectangle_rounded(rect2, 0.1, 100, merged_color)
+                pr.draw_text(
+                    f"{red_choice.r}, {green_choice.g}, {blue_choice.b}",
+                    390,
+                    160,
+                    20,
+                    pr.BLACK,
+                )
+                merged_color_rgb = rgb_to_hex(
+                    r=red_choice.r, g=green_choice.g, b=blue_choice.b
+                )
+                pr.draw_text(f"{merged_color_rgb}", 390, 180, 20, pr.BLACK)
+
+                if (
+                    current_col[0] == merged_color.r
+                    and current_col[1] == merged_color.g
+                    and current_col[2] == merged_color.b
+                ):
+                    pr.draw_text("MATCH", 100, 660, 20, pr.RAYWHITE)
+                else:
+                    pr.draw_text(
+                        "NO MATCH, RETRY A NEW COLOR", 100, 660, 20, pr.RAYWHITE
+                    )
 
         # draw axis
         pr.draw_line(0, height // 2, width, height // 2, pr.RED)
