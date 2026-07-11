@@ -1,40 +1,12 @@
 import asyncio
-import random
 import pyray as pr
 from candidate import ChoiceContainer
 from color_candidate import ColorContainer
+from utils import random_hex_color, rgb_to_hex, hex_to_rgb
 
 width, height = 720, 720
 
-debug: bool = True
-
-
-def random_hex_color() -> str:
-    # Generate a random integer between 0 and 16,777,215 (0xFFFFFF)
-    # Format it as a 6-digit hex string with leading zeros
-    return f"#{random.randint(0, 0xFFFFFF):06x}"
-
-
-def hex_to_rgb(hex_str) -> list[int]:
-    hex_str = hex_str.lstrip("#")
-    # Convert pairs of hex characters to integers
-    # return tuple(int(hex_str[i:i+2], 16) for i in (0, 2, 4))
-    return [int(hex_str[i : i + 2], 16) for i in (0, 2, 4)]
-
-
-def rgb_to_hex(r, g, b) -> str:
-    return f"#{r:02x}{g:02x}{b:02x}"
-
-
-def hex_int_to_rgb(hex_num):
-    r = (hex_num >> 16) & 0xFF
-    g = (hex_num >> 8) & 0xFF
-    b = hex_num & 0xFF
-    return (r, g, b)
-
-
-def gen_new_color():
-    return random.choice([pr.RED, pr.BLUE, pr.GRAY, pr.GREEN, pr.PURPLE, pr.YELLOW])
+debug: bool = False
 
 
 def init_container(r: int, g: int, b: int):
@@ -63,7 +35,6 @@ def init_container(r: int, g: int, b: int):
         color_target='B'
     )
     tmp_blue_container.make_cells()
-
     return tmp_red_container, tmp_green_container, tmp_blue_container
 
 
@@ -84,26 +55,6 @@ async def main():
     red_container: ColorContainer = None
     green_container: ColorContainer = None
     blue_container: ColorContainer = None
-
-    # red_container = ColorContainer(
-    #     position=pr.Vector2(40, 400),
-    #     value=100,
-    #     outline_color=pr.WHITE,
-    #     base_color=pr.RED,
-    # )
-    # green_container = ColorContainer(
-    #     position=pr.Vector2(260, 400),
-    #     value=100,
-    #     outline_color=pr.WHITE,
-    #     base_color=pr.GREEN,
-    # )
-
-    # blue_container = ColorContainer(
-    #     position=pr.Vector2(480, 400),
-    #     value=100,
-    #     outline_color=pr.WHITE,
-    #     base_color=pr.BLUE,
-    # )
 
     while not pr.window_should_close():
         # logic
@@ -167,6 +118,7 @@ async def main():
         if blue_container:
             blue_container.draw()
 
+        # checking when all componenents have been chosen
         if red_container and green_container and blue_container:
             if (
                 red_container.get_colored_picked()
@@ -198,25 +150,26 @@ async def main():
                         20,
                         pr.RAYWHITE,
                     )
-
+                # "merge" the components
                 merged_color = pr.Color(
                     red_choice.r, green_choice.g, blue_choice.b, 255
                 )
 
                 rect2 = pr.Rectangle(370, 90, 150, 150)
                 pr.draw_rectangle_rounded(rect2, 0.1, 100, merged_color)
-                pr.draw_text(
-                    f"{red_choice.r}, {green_choice.g}, {blue_choice.b}",
-                    390,
-                    160,
-                    20,
-                    pr.BLACK,
-                )
                 merged_color_rgb = rgb_to_hex(
                     r=red_choice.r, g=green_choice.g, b=blue_choice.b
                 )
-                pr.draw_text(f"{merged_color_rgb}", 390, 180, 20, pr.BLACK)
+                pr.draw_text(f"{merged_color_rgb}", 390, 160, 20, pr.BLACK)
 
+                pr.draw_text(
+                    f"{red_choice.r}, {green_choice.g}, {blue_choice.b}",
+                    390,
+                    180,
+                    20,
+                    pr.BLACK,
+                )
+                # validating the merged color against the ground truth
                 if (
                     current_col[0] == merged_color.r
                     and current_col[1] == merged_color.g

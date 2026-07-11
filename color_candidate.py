@@ -1,36 +1,14 @@
 import random
 import pyray as pr
-
-colors = [pr.LIGHTGRAY, pr.GRAY, pr.DARKGRAY, pr.YELLOW, pr.GOLD, pr.ORANGE, 
-          pr.PINK, pr.RED, pr.MAROON, pr.GREEN, pr.LIME, pr.DARKGREEN, 
-          pr.SKYBLUE, pr.BLUE, pr.DARKBLUE, pr.PURPLE, pr.VIOLET, pr.DARKPURPLE, 
-          pr.BEIGE, pr.BROWN, pr.DARKBROWN, pr.WHITE, pr.BLACK]
-
-wes_anderson = [
-    pr.Color(155,227,249,255),
-    pr.Color(0,151,195,255),
-    pr.Color(242,79,38,255),
-    pr.Color(255,239,85,255),
-	pr.Color(225,197,163,255),
-    pr.Color(114,223,255,255),
-    pr.Color(250,128,114,255),
-    pr.Color(254,156,31,255),
-    pr.Color(0,128,128,255),
-    pr.Color(13,13,13,255),
-    pr.Color(230, 168, 181,255),
-    pr.Color(167, 197, 235,255),
-    pr.Color(91, 26, 24,255),
-    pr.Color(59, 154, 178,255),
-    pr.Color(235, 204, 42,255),
-    pr.Color(242, 26, 0,255),
-    pr.Color(243, 223, 108,255),
-    pr.Color(139, 175, 159,255),
-    pr.Color(221, 141, 41,255),
-    pr.Color(236, 203, 174,255)
-]
+from utils import wes_anderson
 
 
 class Cell:
+    """
+    - this class describes a given color choice from a color ("R", "G", "B") component
+    - it has a collision detection with the mouse
+    - once collision + mouse pressed, the cell is locked, meaning is not not clickable anymore
+    """
     def __init__(
         self,
         id: int,
@@ -85,16 +63,22 @@ class Cell:
                 10,
                 pr.BLACK,
             )
-            pr.draw_text(
-                f"id={self.id}",
-                int(self.rect.x) + 5,
-                int(self.rect.y) + 20,
-                10,
-                pr.BLACK,
-            )
+            # pr.draw_text(
+            #     f"id={self.id}",
+            #     int(self.rect.x) + 5,
+            #     int(self.rect.y) + 20,
+            #     10,
+            #     pr.BLACK,
+            # )
 
 
 class ColorContainer:
+    """
+    - this class describes a set of 4 color component
+    - one of the cell has the real color componet, while the others are fake
+        - initially I was thinking to add the same color compoenent, i.e shades of red, blue, etc .. but after testing it made the choice more difficult
+    - the real color compoenent is located randomly inside the 4 choices
+    """
     def __init__(
         self,
         position: pr.Vector2,
@@ -126,7 +110,6 @@ class ColorContainer:
             [20 + 80, 20 + 80],
         ]
 
-        # tmp = []
         # add true cell
         self.interactive_area.append(
             Cell(
@@ -148,55 +131,8 @@ class ColorContainer:
                     offset_x=cells_position_offset[i][0],
                     offset_y=cells_position_offset[i][1],
                     color=random.choice(wes_anderson),
-                    # color=random.choice(
-                    #     [
-                    #         pr.Color(253, 249, 0, 255),
-                    #         pr.Color(200, 122, 255, 255),
-                    #         pr.Color(255, 161, 0, 255),
-                    #         pr.Color(200, 200, 200, 255),
-                    #     ]
-                    # ),
                 )
             )
-        # return tmp
-        # tmp = [
-        #     Cell(
-        #         id=0,
-        #         position=pr.Vector2(self.position.x, self.position.y),
-        #         size=pr.Vector2(80, 80),
-        #         offset_x=20,
-        #         offset_y=20,
-        #         color=self.base_color,
-        #     ),
-        #     Cell(
-        #         id=1,
-        #         position=pr.Vector2(self.position.x, self.position.y),
-        #         size=pr.Vector2(80, 80),
-        #         offset_x=20 + 80,
-        #         offset_y=20,
-        #         color=pr.Color(253, 249, 0, 255),
-        #     ),
-        #     Cell(
-        #         id=2,
-        #         position=pr.Vector2(self.position.x, self.position.y),
-        #         size=pr.Vector2(80, 80),
-        #         offset_x=20,
-        #         offset_y=20 + 80,
-        #         color=pr.Color(200, 122, 255, 255),
-        #     ),
-        #     Cell(
-        #         id=3,
-        #         position=pr.Vector2(self.position.x, self.position.y),
-        #         size=pr.Vector2(80, 80),
-        #         offset_x=20 + 80,
-        #         offset_y=20 + 80,
-        #         color=pr.Color(255, 161, 0, 255),
-        #     ),
-        # ]
-
-    # self.is_picked: bool = False
-    # self.colored_picked: pr.Color = None
-    # self.id_picked: int = None
 
     def get_colored_picked(self) -> pr.Color:
         if self.is_picked:
@@ -222,23 +158,7 @@ class ColorContainer:
 
     def draw(self) -> None:
         # outline
-        rect = pr.Rectangle(self.position.x, self.position.y, 200, 200)
-        pr.draw_rectangle_lines_ex(rect, 1, self.outline_color)
+        # rect = pr.Rectangle(self.position.x, self.position.y, 200, 200)
+        # pr.draw_rectangle_lines_ex(rect, 1, self.outline_color)
         pr.draw_text(f"Choose the {self.color_target}\n component", int(self.position.x) + 40, int(self.position.y) + 200, 20, pr.RAYWHITE)
         _ = [c.draw() for c in self.interactive_area]
-
-        # this works -> do not delete
-        # choices: 1 is the correct value, the other are fake colors
-        # tl_rect = pr.Rectangle(self.position.x + 20, self.position.y + 20, 80, 80)
-        # pr.draw_rectangle_rec(tl_rect, self.base_color)
-
-        # tr_rect = pr.Rectangle(self.position.x + 20 + 80, self.position.y + 20, 80, 80)
-        # pr.draw_rectangle_rec(tr_rect, pr.GRAY)
-
-        # bl_rect = pr.Rectangle(self.position.x + 20, self.position.y + 20 + 80, 80, 80)
-        # pr.draw_rectangle_rec(bl_rect, pr.DARKGRAY)
-
-        # br_rect = pr.Rectangle(
-        #     self.position.x + 20 + 80, self.position.y + 20 + 80, 80, 80
-        # )
-        # pr.draw_rectangle_rec(br_rect, pr.WHITE)
