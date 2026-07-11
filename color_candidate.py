@@ -1,6 +1,34 @@
 import random
 import pyray as pr
 
+colors = [pr.LIGHTGRAY, pr.GRAY, pr.DARKGRAY, pr.YELLOW, pr.GOLD, pr.ORANGE, 
+          pr.PINK, pr.RED, pr.MAROON, pr.GREEN, pr.LIME, pr.DARKGREEN, 
+          pr.SKYBLUE, pr.BLUE, pr.DARKBLUE, pr.PURPLE, pr.VIOLET, pr.DARKPURPLE, 
+          pr.BEIGE, pr.BROWN, pr.DARKBROWN, pr.WHITE, pr.BLACK]
+
+wes_anderson = [
+    pr.Color(155,227,249,255),
+    pr.Color(0,151,195,255),
+    pr.Color(242,79,38,255),
+    pr.Color(255,239,85,255),
+	pr.Color(225,197,163,255),
+    pr.Color(114,223,255,255),
+    pr.Color(250,128,114,255),
+    pr.Color(254,156,31,255),
+    pr.Color(0,128,128,255),
+    pr.Color(13,13,13,255),
+    pr.Color(230, 168, 181,255),
+    pr.Color(167, 197, 235,255),
+    pr.Color(91, 26, 24,255),
+    pr.Color(59, 154, 178,255),
+    pr.Color(235, 204, 42,255),
+    pr.Color(242, 26, 0,255),
+    pr.Color(243, 223, 108,255),
+    pr.Color(139, 175, 159,255),
+    pr.Color(221, 141, 41,255),
+    pr.Color(236, 203, 174,255)
+]
+
 
 class Cell:
     def __init__(
@@ -73,11 +101,13 @@ class ColorContainer:
         value: int,
         outline_color: pr.Color,
         base_color: pr.Color,
+        color_target: str
     ) -> None:
         self.position = position
         self.value = value
         self.outline_color = outline_color
         self.base_color = base_color
+        self.color_target = color_target
         self.interactive_area: list[Cell] = []  # make_cells()
         self.is_picked: bool = False
         self.colored_picked: pr.Color = None
@@ -117,13 +147,15 @@ class ColorContainer:
                     size=pr.Vector2(80, 80),
                     offset_x=cells_position_offset[i][0],
                     offset_y=cells_position_offset[i][1],
-                    color=random.choice(
-                        [
-                            pr.Color(253, 249, 0, 255),
-                            pr.Color(200, 122, 255, 255),
-                            pr.Color(255, 161, 0, 255),
-                        ]
-                    ),
+                    color=random.choice(wes_anderson),
+                    # color=random.choice(
+                    #     [
+                    #         pr.Color(253, 249, 0, 255),
+                    #         pr.Color(200, 122, 255, 255),
+                    #         pr.Color(255, 161, 0, 255),
+                    #         pr.Color(200, 200, 200, 255),
+                    #     ]
+                    # ),
                 )
             )
         # return tmp
@@ -192,6 +224,7 @@ class ColorContainer:
         # outline
         rect = pr.Rectangle(self.position.x, self.position.y, 200, 200)
         pr.draw_rectangle_lines_ex(rect, 1, self.outline_color)
+        pr.draw_text(f"Choose the {self.color_target}\n component", int(self.position.x) + 40, int(self.position.y) + 200, 20, pr.RAYWHITE)
         _ = [c.draw() for c in self.interactive_area]
 
         # this works -> do not delete

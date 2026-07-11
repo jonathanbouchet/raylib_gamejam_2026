@@ -6,6 +6,8 @@ from color_candidate import ColorContainer
 
 width, height = 720, 720
 
+debug: bool = True
+
 
 def random_hex_color() -> str:
     # Generate a random integer between 0 and 16,777,215 (0xFFFFFF)
@@ -42,6 +44,7 @@ def init_container(r: int, g: int, b: int):
         value=100,
         outline_color=pr.WHITE,
         base_color=pr.Color(r, 0, 0, 255),
+        color_target='R'
     )
     tmp_red_container.make_cells()
     tmp_green_container = ColorContainer(
@@ -49,6 +52,7 @@ def init_container(r: int, g: int, b: int):
         value=100,
         outline_color=pr.WHITE,
         base_color=pr.Color(0, g, 0, 255),
+        color_target='G'
     )
     tmp_green_container.make_cells()
     tmp_blue_container = ColorContainer(
@@ -56,6 +60,7 @@ def init_container(r: int, g: int, b: int):
         value=100,
         outline_color=pr.WHITE,
         base_color=pr.Color(0, 0, b, 255),
+        color_target='B'
     )
     tmp_blue_container.make_cells()
 
@@ -139,7 +144,7 @@ async def main():
             pr.draw_rectangle_rounded(rect, 0.1, 100, current_col)
             pr.draw_text(current_hex, 240, 160, 20, pr.BLACK)
 
-            pr.draw_text(f"your merge candidate", 370, 70, 20, pr.RAYWHITE)
+            pr.draw_text(f"your candidate", 370, 70, 20, pr.RAYWHITE)
             # rect2 = pr.Rectangle(370, 90, 150, 150)
             # pr.draw_rectangle_rounded(rect2, 0.1, 100, current_col)
             # pr.draw_text(current_rgb, 390, 160, 20, pr.BLACK)
@@ -171,27 +176,28 @@ async def main():
                 red_choice = red_container.get_colored_picked()
                 green_choice = green_container.get_colored_picked()
                 blue_choice = blue_container.get_colored_picked()
-                pr.draw_text(
-                    f"RED: {red_choice.r}, {red_choice.g}, {red_choice.b}",
-                    100,
-                    600,
-                    20,
-                    pr.RAYWHITE,
-                )
-                pr.draw_text(
-                    f"GREEN: {green_choice.r}, {green_choice.g}, {green_choice.b}",
-                    100,
-                    620,
-                    20,
-                    pr.RAYWHITE,
-                )
-                pr.draw_text(
-                    f"BLUE: {blue_choice.r}, {blue_choice.g}, {blue_choice.b}",
-                    100,
-                    640,
-                    20,
-                    pr.RAYWHITE,
-                )
+                if debug:
+                    pr.draw_text(
+                        f"RED: {red_choice.r}, {red_choice.g}, {red_choice.b}",
+                        0,
+                        100,
+                        20,
+                        pr.RAYWHITE,
+                    )
+                    pr.draw_text(
+                        f"GREEN: {green_choice.r}, {green_choice.g}, {green_choice.b}",
+                        0,
+                        120,
+                        20,
+                        pr.RAYWHITE,
+                    )
+                    pr.draw_text(
+                        f"BLUE: {blue_choice.r}, {blue_choice.g}, {blue_choice.b}",
+                        0,
+                        140,
+                        20,
+                        pr.RAYWHITE,
+                    )
 
                 merged_color = pr.Color(
                     red_choice.r, green_choice.g, blue_choice.b, 255
@@ -216,18 +222,19 @@ async def main():
                     and current_col[1] == merged_color.g
                     and current_col[2] == merged_color.b
                 ):
-                    pr.draw_text("MATCH", 100, 660, 20, pr.RAYWHITE)
+                    pr.draw_text("MATCH", 250, 650, 50, pr.GREEN)
                 else:
                     pr.draw_text(
-                        "NO MATCH, RETRY A NEW COLOR", 100, 660, 20, pr.RAYWHITE
+                        "NO MATCH", 250, 650, 50, pr.RED
                     )
 
         # draw axis
-        pr.draw_line(0, height // 2, width, height // 2, pr.RED)
-        pr.draw_line(width // 2, 0, width // 2, height, pr.RED)
+        if debug:
+            pr.draw_line(0, height // 2, width, height // 2, pr.RED)
+            pr.draw_line(width // 2, 0, width // 2, height, pr.RED)
+            pr.draw_fps(0, 0)
 
         pr.end_drawing()
-        pr.draw_fps(0, 0)
         await asyncio.sleep(0)
 
     pr.close_window()
