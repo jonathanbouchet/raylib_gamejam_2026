@@ -16,7 +16,7 @@ def init_container(r: int, g: int, b: int):
         value=100,
         outline_color=pr.WHITE,
         base_color=pr.Color(r, 0, 0, 255),
-        color_target='R'
+        color_target="R",
     )
     tmp_red_container.make_cells()
     tmp_green_container = ColorContainer(
@@ -24,7 +24,7 @@ def init_container(r: int, g: int, b: int):
         value=100,
         outline_color=pr.WHITE,
         base_color=pr.Color(0, g, 0, 255),
-        color_target='G'
+        color_target="G",
     )
     tmp_green_container.make_cells()
     tmp_blue_container = ColorContainer(
@@ -32,7 +32,7 @@ def init_container(r: int, g: int, b: int):
         value=100,
         outline_color=pr.WHITE,
         base_color=pr.Color(0, 0, b, 255),
-        color_target='B'
+        color_target="B",
     )
     tmp_blue_container.make_cells()
     return tmp_red_container, tmp_green_container, tmp_blue_container
@@ -58,7 +58,6 @@ async def main():
 
     while not pr.window_should_close():
         # logic
-        dt = pr.get_frame_time()
         if red_container is not None:
             red_container.update()
         if green_container is not None:
@@ -90,12 +89,12 @@ async def main():
                 )
 
         if is_generated:
-            pr.draw_text(f"Color to find", 210, 70, 20, pr.RAYWHITE)
+            pr.draw_text("Color to find", 210, 70, 20, pr.RAYWHITE)
             rect = pr.Rectangle(200, 90, 150, 150)
             pr.draw_rectangle_rounded(rect, 0.1, 100, current_col)
             pr.draw_text(current_hex, 240, 160, 20, pr.BLACK)
 
-            pr.draw_text(f"your candidate", 370, 70, 20, pr.RAYWHITE)
+            pr.draw_text("your candidate", 370, 70, 20, pr.RAYWHITE)
             # rect2 = pr.Rectangle(370, 90, 150, 150)
             # pr.draw_rectangle_rounded(rect2, 0.1, 100, current_col)
             # pr.draw_text(current_rgb, 390, 160, 20, pr.BLACK)
@@ -177,9 +176,7 @@ async def main():
                 ):
                     pr.draw_text("MATCH", 250, 650, 50, pr.GREEN)
                 else:
-                    pr.draw_text(
-                        "NO MATCH", 250, 650, 50, pr.RED
-                    )
+                    pr.draw_text("NO MATCH", 250, 650, 50, pr.RED)
 
         # draw axis
         if debug:

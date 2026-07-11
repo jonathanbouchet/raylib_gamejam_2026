@@ -9,6 +9,7 @@ class Cell:
     - it has a collision detection with the mouse
     - once collision + mouse pressed, the cell is locked, meaning is not not clickable anymore
     """
+
     def __init__(
         self,
         id: int,
@@ -79,13 +80,14 @@ class ColorContainer:
         - initially I was thinking to add the same color compoenent, i.e shades of red, blue, etc .. but after testing it made the choice more difficult
     - the real color compoenent is located randomly inside the 4 choices
     """
+
     def __init__(
         self,
         position: pr.Vector2,
         value: int,
         outline_color: pr.Color,
         base_color: pr.Color,
-        color_target: str
+        color_target: str,
     ) -> None:
         self.position = position
         self.value = value
@@ -99,10 +101,10 @@ class ColorContainer:
 
     def make_cells(self) -> list[Cell]:
         # randomize the position of the true value
-        l = [0, 1, 2, 3]
-        true_pos = random.choice(l)
-        l.remove(true_pos)
-        print(f"{true_pos=}, {l=}")
+        indices: list[int] = [0, 1, 2, 3]
+        true_pos = random.choice(indices)
+        indices.remove(true_pos)
+        print(f"{true_pos=}, {indices=}")
         cells_position_offset = [
             [20, 20],
             [20 + 80, 20],
@@ -122,7 +124,7 @@ class ColorContainer:
             )
         )
         # add fake cells
-        for i in l:
+        for i in indices:
             self.interactive_area.append(
                 Cell(
                     id=i,
@@ -160,5 +162,11 @@ class ColorContainer:
         # outline
         # rect = pr.Rectangle(self.position.x, self.position.y, 200, 200)
         # pr.draw_rectangle_lines_ex(rect, 1, self.outline_color)
-        pr.draw_text(f"Choose the {self.color_target}\n component", int(self.position.x) + 40, int(self.position.y) + 200, 20, pr.RAYWHITE)
+        pr.draw_text(
+            f"Choose the {self.color_target}\n component",
+            int(self.position.x) + 40,
+            int(self.position.y) + 200,
+            20,
+            pr.RAYWHITE,
+        )
         _ = [c.draw() for c in self.interactive_area]
