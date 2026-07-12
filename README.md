@@ -43,13 +43,22 @@ uv sync
 uv run main.py
 ```
 
+#### `with pygbag`
+```python
+pygbag --build --html src/main.py
+```
+
+#### Built provided 
+- `dist.zip` is the package app created with `pyinstaller`
+- `find_the_hex_v0.zip` is the web built for `itch.io`
+
 ### Developers
 
  - $(me) - $(all)
 
 ### Links
 
- - itch.io Release: $(itch.io Game Page)
+ - itch.io Release: https://jonathanbouchet.itch.io/findthehex
 
 ### License
 
