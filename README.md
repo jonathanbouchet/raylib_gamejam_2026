@@ -9,11 +9,14 @@
 - for each component, the real value is hidden between 3 other fakes
 - you can choose each component in different order, i.e starting from `B`, then `R` then `G`
 - once a component is chosen, you can't go back
+- `show hints` will show the `RGB` components of the real value and those you have chosen
 
 ### Features
 
  - puzzle game
  - very quick gameplay
+ - python 3.13
+ - no music/sound
 
 ### Controls
 
@@ -23,7 +26,22 @@ Mouse
 
 ![$(Game Title)](screenshots/screenshot1.png) 
 
-![$(End of run)](screenshots/screenshot2.png)
+![$(Game running)](screenshots/screenshot15.png) 
+
+![$(Success)](screenshots/screenshot2.png) 
+
+![$(Fail)](screenshots/screenshot3.png) 
+
+![$(Got hint)](screenshots/screenshot4.png)
+
+### Installation
+
+#### `uv`
+
+```python
+uv sync
+uv run main.py
+```
 
 ### Developers
 
